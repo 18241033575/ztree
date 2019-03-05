@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="plugins/css/zTreeStyle/zTreeStyle.css" type="text/css">
+		<link rel="stylesheet" href="css/iconfont.css" type="text/css">
+		<link rel="stylesheet" href="css/range-window.css" type="text/css">
+		<script type="text/javascript" src="plugins/js/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.excheck.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.exhide.js"></script>
+		<script type="text/javascript" src="plugins/js/fuzzysearch.js"></script>
+	</head>
+	<body>
+		<div class="show-range-window addbtn"> 选择成员 </div>
+		
+		<div class="range-window">
+	        <div class="title">
+	            <i class="J_close icon iconfont icon-close hide-range-window" id="shut-range-window"></i>
+	            <span class="rangetitle">选择查看范围</span>
+	            <button class="determine J_yeah">确定</button>
+	        </div>
+	        <div class="left">
+	            <div class="search-box">
+	                <input type="text" placeholder="搜索成员" id="searchuser">
+	                <button class="searchbtn">
+	                    <i class="icon iconfont icon-sousuo"></i>
+	                </button>
+	            </div>
+	            <div class="layer" style="height: 82%;">
+	                <ul id="range-tree" class="ztree" style="overflow: auto;"></ul>
+	            </div>
+	        </div>
+	        <div class="right">
+	            <div class="title">已选列表 <span class="deletebtn">全部清除</span></div>
+	            <div class="content">
+	                <!-- <div class="department">
+	                    <div class="checked-title">已选部门</div>
+	                    <div class="text">
+	                        <span></span>
+	                    </div>
+	                </div> -->
+	                <div class="member">
+	                    <!-- <div class="checked-title">已选人员<span class="deletebtn">清除选择</span></div> -->
+	                    <ul class="member-list">
+							
+						</ul>
+	                </div>
+	            </div>
+	        </div>
+    </div>
+	<div class="mask"></div>
+	
+	
+	<script type="text/javascript">
+		var zTree = null;
+		var setting = {
+			check: {
+				enable: true,
+			},
+			view: {
+				dblClickExpand: false,
+				showLine: false,
+				showIcon: true
+			},
+			data: {
+				simpleData: {
+				enable: true
+				}
+			},
+			callback: {
+				onClick: onClick,
+				onCheck: zTreeOnCheck,
+				
+			}
+			
+		};
+
+		var zNodes =[
+			{ id:1, pId:0, name:"贵州知商网络技术开发有限公司",icon:"./img/company.png", open:true},
+			{ id:11, pId:1, name:"开发部",icon:"./img/department.png",checked:true},
+			{ id:111, pId:11, name:"张三",icon:"./img/default_face.png"},
+			{ id:112, pId:11, name:"李四",icon:"./img/default_face.png"},
+			{ id:113, pId:11, name:"王五",icon:"./img/default_face.png"},
+			{ id:114, pId:11, name:"吱鸟办公",icon:"./img/department.png"},
+			{ id:115, pId:114, name:"赵六",icon:"./img/default_face.png"},
+			{ id:116, pId:114, name:"何七",icon:"./img/default_face.png"},
+			{ id:117, pId:11, name:"对外开发",icon:"./img/department.png"},
+			{ id:118, pId:117, name:"刘鑫城",icon:"./img/default_face.png"},
+			{ id:119, pId:117, name:"杨百开亿",icon:"./img/default_face.png"},
+			{ id:12, pId:1, name:"直销部",icon:"./img/department.png"},
+			{ id:121, pId:12, name:"杨过",icon:"./img/default_face.png"},
+			{ id:122, pId:12, name:"小龙女",icon:"./img/default_face.png"},
+			{ id:123, pId:12, name:"犯BB",icon:"./img/default_face.png"},
+			{ id:124, pId:12, name:"大黑牛",icon:"./img/default_face.png"},
+			{ id:125, pId:12, name:"小开",icon:"./img/default_face.png"},
+			{ id:13, pId:1, name:"招商部",icon:"./img/department.png"},
+			{ id:131, pId:13, name:"张三丰",icon:"./img/default_face.png"},
+			{ id:132, pId:13, name:"邱处机",icon:"./img/default_face.png"},
+			{ id:133, pId:13, name:"王重阳",icon:"./img/default_face.png"},
+			{ id:134, pId:13, name:"周芷若",icon:"./img/default_face.png"},
+			{ id:135, pId:13, name:"王若西",icon:"./img/default_face.png"},
+			{ id:14, pId:1, name:"小宝",icon:"./img/default_face.png"},
+			{ id:15, pId:1, name:"郭靖",icon:"./img/default_face.png"},
+			{ id:16, pId:1, name:"郭芙",icon:"./img/default_face.png"},
+			{ id:17, pId:1, name:"大定",icon:"./img/default_face.png",checked:true},
+			{ id:18, pId:1, name:"大侠",icon:"./img/default_face.png"},
+		];
+		var oldZnodes=zNodes;
+		//点击事件
+		function onClick(e,treeId, treeNode,clickFlag) {
+			zTree.expandNode(treeNode);
+		}
+		//zTreeOnCheck选择事件
+		function zTreeOnCheck(e,treeId, treeNode){
+			if(treeNode.checked){//勾选
+				var nodes = zTree.getCheckedNodes(true);//获取所有选中的节点(包含父级)
+				for (var i = 0; i < nodes.length; i++) {
+					if(!nodes[i].isParent){
+						addCheckedToMemberList(nodes[i].pId,nodes[i].id,filterHTMLTag(nodes[i].name),nodes[i].icon,".member-list");
+					}
+				}
+			}else{//取消勾选
+				if(!treeNode.isParent){
+					$(".member-list>li[uid='" + treeNode.id + "']").remove();
+				}else{
+					$(".member-list>li[pid*='" + treeNode.id + "']").remove();
+				}
+			}
+		}
+		//过滤搜索飘红产生的html
+		function filterHTMLTag(msg) {
+			var msg = msg.replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
+			msg = msg.replace(/[|]*\n/, '') //去除行尾空格
+			msg = msg.replace(/&npsp;/ig, ''); //去掉npsp
+			return msg;
+		}
+		
+		/*获取某节点的所有子节点*/
+		function checkedAllChildrenNodes(treeNode){
+				if (treeNode.isParent) {
+				var childrenNodes = treeNode.children;
+				if (childrenNodes) {
+					for (var i = 0; i < childrenNodes.length; i++) {
+						zTree.checkNode(childrenNodes[i],true,true)
+						result = checkedAllChildrenNodes(childrenNodes[i]);
+					}
+				}
+			}
+		}
+		//将当前选择成员添加到(右侧)选择列表中
+		function addCheckedToMemberList(pid,uid,uname,face,member_list){//member_list:已选目标位置
+			if(!face){face=''};//默认头像
+			var member_list = $(member_list);
+			var member_list_lis = member_list.children("li");//获取已经选择人所有成员
+			var has=false;
+			for(i=0;i<member_list_lis.length;i++){
+				if(member_list_lis.eq(i).attr("uid")==uid){
+					has=true;
+					return;
+				}
+			}
+			if(!has){
+				var checkedMember="<li cliss='member' pid='" + pid + "' uid='" + uid + "' uname='" + uname+"'><div class='face' style='background:url(" + face + ") no-repeat 0 center'></div>" + uname + "<i class='icon iconfont icon-close delete'></i></li>"
+				member_list.append(checkedMember);	
+			}
+		}
+		//初始化固定滚动列表高度
+		$(".layer").height($(".range-window").height()-$(".layer").offset().top);
+		$(".content").height($(".range-window").height()-$(".content").offset().top);
+		$(function(){
+			/**初始化ztree**/
+			$.fn.zTree.init($("#range-tree"), setting, zNodes);
+			zTree = $.fn.zTree.getZTreeObj("range-tree");
+			var addbtn=$(".addbtn");
+			var mask=$(".mask");
+			var range_window=$(".range-window");
+			//弹出侧滑
+			addbtn.click(function(){
+				mask.show();
+				range_window.animate({right:"0"},200);
+				checkDataInit(false);//关闭侧滑后,重新打开是否保存上次操作的选择状态
+			})
+			//关闭侧滑
+			$(".mask,#shut-range-window").click(function(){
+				mask.hide();
+				range_window.animate({right:"-100%"},200);
+				return false;
+			}) 
+			//确认
+			$(".J_yeah").click(function(){
+				var unames="";//选择成员的uid
+				var uids="";//选择成员的姓名
+				 $(".member-list>li").each(function(){
+					uids+=","+$(this).attr("uid");
+					unames+=","+$(this).attr("uname");
+				})
+				uids=uids.substr(1);
+				unames=unames.substr(1);
+				range_window.animate({right:"-100%"},200);
+				mask.hide();
+				alert(uids+"\n"+unames);
+			})
+			/***初始化选中数据***///关闭侧滑后,重新打开是否保存上次操作的选择状态
+			function checkDataInit(saveChecked){//saveChecked：加载临时已选择数据,true为加载,false为不加载临时选择的数据
+				if(!saveChecked){return false;}
+				$(".member-list").html("");
+				$.fn.zTree.init($("#range-tree"), setting, oldZnodes);//初始化原始数据
+				var nodes = zTree.getCheckedNodes(true);//获取所有选中的节点(包含父级)
+				for (var i = 0; i < nodes.length; i++) {
+					if(!nodes[i].isParent){
+						addCheckedToMemberList(nodes[i].pId,nodes[i].id,nodes[i].name,nodes[i].icon,".member-list");
+						var node = zTree.getNodeByParam("id",nodes[i].id);
+						zTree.checkNode(node,true,true);//解决初始化时,子节点全选,父节点确没有选中的问题
+					}else{
+						checkedAllChildrenNodes(nodes[i]);
+						var nodes = zTree.getCheckedNodes(true);//获取所有选中的节点(包含父级)
+						for (var i = 0; i < nodes.length; i++) {
+							if(!nodes[i].isParent){
+								addCheckedToMemberList(nodes[i].pId,nodes[i].id,filterHTMLTag(nodes[i].name),nodes[i].icon,".member-list");
+							}
+						}
+					}
+				}
+			}
+			checkDataInit(true);
+			
+			
+			
+			/***已选人员批量清除***/
+			$(".deletebtn").live("click",function(){
+				if($(".member-list>li").length<=0){return false};
+				$(".member-list>li").each(function(){
+					node = zTree.getNodeByParam("id", $(this).attr("uid"));
+					zTree.checkNode(node,false,true);
+					$(this).remove();
+				})
+				
+			})
+			/***已选人员单个清除***/
+			$(".member-list>li>i").live("click",function(){
+				var node = zTree.getNodeByParam("id", $(this).parent().attr("uid"));
+				//取消选择
+				zTree.checkNode(node,false,true);
+				$(this).parent().remove();
+			})
+			/***搜索***/
+			fuzzySearch('range-tree','#searchuser',null,false);  //初始化模糊搜索方法
+			
+		})
+		
+	</script>
+	</body>
+</html>
+
+

@@ -1,0 +1,310 @@
+*{
+	padding: 0;
+	margin: 0;
+	outline: none;
+
+}
+.addbtn{
+	width: 100px;
+	height: 40px;
+	background: #0B61A4;
+	border: 1px #0B61A4 solid;
+	line-height: 40px;
+	text-align: center;
+	color: #fff;
+	cursor: pointer;
+}
+.mask{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 999;
+	top:0;
+	left: 0;
+	background: rgba(200,200,200,.2);
+	display: none;
+}
+.range-window{
+	width: 50%;
+	max-width: 720px;
+	min-width: 600px;
+	height: 100%;
+	position: fixed;
+	right: -720px;
+	top:0;
+	z-index: 1000;
+	background: #fff;
+	box-shadow: #666 0 -5px 5px;
+	color: #353535;
+	font-family: "微软雅黑";
+	}
+#range-window-single{
+	width: 30%;
+	max-width: 500px;
+	min-width: 400px;
+}
+	.range-window>.title{
+		height: 70px;
+		line-height: 70px;
+		background: #F3F3F4;
+		border-bottom: 1px solid #ccc;
+	}
+	.range-window .title .hide-range-window{
+		font-size: 24px;
+		font-weight: bold;
+		color: #aaa;
+		cursor: pointer;
+		padding: 0 10px 0 30px;
+	}
+	.range-window .title span.rangetitle{
+		font-size: 25px;
+	}
+	.range-window .title .determine{
+		float: right;
+		width: 150px;
+		background: #478DEE;
+		color: #fff;
+		font-size: 18px;
+		text-align: center;
+		display: block;
+		border: 0;
+		height: 70px;
+		cursor: pointer;
+	}
+	.range-window .left{
+		float: left;
+		width: 60%;
+		height: 100%;
+		border-right:1px solid #E6E9EB;
+	}
+	#range-window-single .left{
+		width: 100%;
+		border-right: none;
+	}
+	.range-window .right{
+		float: right;
+		width: 38%;
+		padding-left: 10px;
+		height: 92%;
+	}
+	.range-window .left .search-box{
+		margin: 0 auto;
+		height: 40px;
+		width: 90%;
+		padding: 31px 5% 0 5%;
+	}
+	.range-window .left .search-box input{
+		height: 38px;
+		border: 1px solid #DBDBDB;
+		width: 80%;
+		display: block;
+		float: left;
+		padding: 0 5%;
+		margin: 0;
+		box-sizing: border-box;
+		border-radius: 4px 0 0 4px;
+	}
+	.range-window .left .search-box button{
+		height: 38px;
+		border: 1px solid #DBDBDB;
+		border-left:none ;
+		cursor: pointer;
+		display: block;
+		width: 20%;
+		float: left;
+		background: #fafafa;
+		border-radius: 0 4px 4px 0;
+	}
+	.range-window .left .search-box .iconfont{
+		font-size: 24px;
+		color: #ccc;
+	}
+	.range-window .left .layer{
+		padding: 0 5%;
+	}
+	.range-window .left ul.ztree{
+		height: 100%;
+	}
+	.range-window .left .layer .ztree{
+		width: 100%;
+		border: none;
+		background: none;
+		margin-left: 0;
+		margin-right: 0;
+		padding: 0;
+	}
+	.range-window .right .title{
+		color: #bbb;
+	}
+	.ztree li{
+		position: relative;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		overflow:hidden;
+	}
+	.ztree li a,.ztree li a.curSelectedNode{
+		padding: 10px 0;
+		display: inline-block;
+		width: 95.5%;
+		border: none;
+		background: none;
+	}
+	@media screen and (max-width: 1400px) {
+    .ztree li a,.ztree li a.curSelectedNode{
+    	padding: 10px 0;
+    	display: inline-block;
+    	width: 94.8%;
+    	border: none;
+    	background: none;
+    }
+	}
+	.ztree li a:hover{
+		background: #f5f5f5;
+		text-decoration: none;
+		opacity: 0.7;
+	}
+	.ztree li span.button.chk{
+		float: right;
+		cursor: pointer;
+		z-index: 9999;
+		position: absolute;
+		right: 2px;
+		top: 0;
+		margin-right: 0;
+	}
+	.ztree *{
+		font-size: 14px;
+	}
+.ztree li span.button.switch,.ztree li span.button.chk{
+	/* margin: 13px 0;	 */
+	width: 16px;
+	height: 44px;
+	padding: 0;
+}
+.ztree li span.button.chk{
+	width: 40px;
+}
+.ztree li span{
+	line-height: 24px;
+}
+.ztree li span.button{
+	width: 24px;
+	height: 24px;
+}
+
+
+.range-window .right .title{
+	line-height: 30px;
+	padding-top: 22px;
+	height: 30px;
+}
+.member-list,.department-list{
+	padding-left: 10px;
+	line-height: 44px;
+	font-size: 14px;
+	font-family: "微软雅黑";
+}
+.department-list{
+	box-shadow: #dedede 1px 0px 10px;
+}
+.member-list li,.department-list li{
+	list-style: none;
+	height: 44px;
+	line-height: 44px;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.member-list li:hover,.department-list li:hover{
+	background: #f5f5f5;
+	opacity: 0.7;
+}
+.member-list li i.delete,.department-list li i.delete{
+	padding: 0px 20px;
+	float: right;
+	cursor: pointer;
+	opacity: 0.3;
+}
+.member-list li i.delete:hover,.department-list li i.delete:hover{
+	opacity: 1;
+}
+
+.ztree li span.button.chk.checkbox_true_full,
+.ztree li span.button.chk.checkbox_true_full_focus{
+	background: url(../img/check-box.png) no-repeat right center;
+}
+.ztree li span.button.chk.checkbox_false_full,
+.ztree li span.button.chk.checkbox_false_full_focus,
+.ztree li span.button.chk.checkbox_true_part,
+.ztree li span.button.chk.checkbox_true_part_focus,
+.ztree li span.button.chk.checkbox_false_part,
+.ztree li span.button.chk.checkbox_false_part_focus
+{
+	background: url(../img/check-box-outline-blank.png) no-repeat right center;
+}
+
+.ztree li span.button.noline_open{
+	background: url(../img/right.png) no-repeat;
+	background-position: right center; 
+	transform: rotate(90deg);
+}
+.ztree li span.button.noline_close{
+	background: url(../img/right.png) no-repeat;
+	background-position: right center; 
+	
+}
+.ztree li span.button.ico_close,.ztree li span.button.ico_open{
+	margin-right: 10px;
+}
+.ztree li span#range-tree_1_ico{
+	width: 0;
+	height: 0;
+	background: none; 
+}
+.ztree li span.button.ico_docu{
+	margin-right: 12px;
+}
+.ztree li a,.ztree li a.curSelectedNode{
+	height: 24px;
+	line-height: 24px;
+}
+.right .checked-title{
+	font-size: 14px;
+	background: #f5f5f5;
+	height: 40px;
+	line-height: 40px;
+}
+.deletebtn{
+	float: right;
+	padding: 0 20px;
+	cursor: pointer;
+}
+.deletebtn:hover{
+	color: #f00;
+}
+
+.right  .content{
+	height: 95%;
+	overflow: auto;
+	font-size: 16px;
+}
+.right  .content .face{
+	height: 44px;
+	width: 36px;
+	float: left;
+}
+
+.ztree li span.button.chk.radio_false_part,
+.ztree li span.button.chk.radio_false_full_focus,
+.ztree li span.button.chk.radio_false_full
+{
+	background: url(../img/radio_box.png) no-repeat right center;
+}
+.ztree li span.button.chk.radio_true_full,
+.ztree li span.button.chk.radio_true_full_focus,
+.ztree li span.button.chk.radio_false_part_focus,
+.ztree li span.button.chk.radio_true_part,
+.ztree li span.button.chk.radio_true_part_focus
+{
+	background: url(../img/radio_current.png) no-repeat right center;
+}

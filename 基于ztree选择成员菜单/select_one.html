@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="plugins/css/zTreeStyle/zTreeStyle.css" type="text/css">
+		<link rel="stylesheet" href="css/iconfont.css" type="text/css">
+		<link rel="stylesheet" href="css/range-window.css" type="text/css">
+		<script type="text/javascript" src="plugins/js/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.excheck.js"></script>
+		<script type="text/javascript" src="plugins/js/jquery.ztree.exhide.js"></script>
+		<script type="text/javascript" src="plugins/js/fuzzysearch.js"></script>
+	</head>
+	<body>
+		<div class="show-range-window addbtn"> 选择成员 </div>
+		
+		<div class="range-window" id="range-window-single" >
+	        <div class="title">
+	            <i class="J_close icon iconfont icon-close hide-range-window" id="shut-range-window"></i>
+	            <span class="rangetitle">选择查看范围</span>
+	            <button class="determine J_yeah">确定</button>
+	        </div>
+	        <div class="left">
+	            <div class="search-box">
+	                <input type="text" placeholder="搜索成员" id="searchuser">
+	                <button class="searchbtn">
+	                    <i class="icon iconfont icon-sousuo"></i>
+	                </button>
+	            </div>
+	            <div class="layer" style="height: 82%;">
+	                <ul id="range-tree" class="ztree" style="overflow: auto;"></ul>
+	            </div>
+	        </div>
+	        
+    </div>
+	<div class="mask"></div>
+	
+	
+	<script type="text/javascript">
+		var zTree = null;
+		var setting = {
+			check: {
+				enable: true,
+				chkStyle: "radio",
+				radioType: "all"
+			},
+			view: {
+				dblClickExpand: false,
+				showLine: false,
+				showIcon: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onClick: onClick,
+				onCheck: zTreeOnCheck,
+				
+			}
+			
+		};
+
+		var zNodes =[
+			{ id:1, pId:0, name:"贵州知商网络技术开发有限公司",icon:"./img/company.png",nocheck:true, open:true},
+			{ id:11, pId:1, name:"开发部",icon:"./img/department.png",nocheck:true},
+			{ id:111, pId:11, name:"张三",icon:"./img/default_face.png"},
+			{ id:112, pId:11, name:"李四",icon:"./img/default_face.png"},
+			{ id:113, pId:11, name:"王五",icon:"./img/default_face.png"},
+			{ id:114, pId:11, name:"吱鸟办公",icon:"./img/department.png",nocheck:true},
+			{ id:115, pId:114, name:"赵六",icon:"./img/default_face.png"},
+			{ id:116, pId:114, name:"何七",icon:"./img/default_face.png"},
+			{ id:117, pId:11, name:"对外开发",icon:"./img/department.png",nocheck:true},
+			{ id:118, pId:117, name:"刘鑫城",icon:"./img/default_face.png"},
+			{ id:119, pId:117, name:"杨百开亿",icon:"./img/default_face.png"},
+			{ id:12, pId:1, name:"直销部",icon:"./img/department.png",nocheck:true},
+			{ id:121, pId:12, name:"杨过",icon:"./img/default_face.png"},
+			{ id:122, pId:12, name:"小龙女",icon:"./img/default_face.png"},
+			{ id:123, pId:12, name:"犯BB",icon:"./img/default_face.png"},
+			{ id:124, pId:12, name:"大黑牛",icon:"./img/default_face.png"},
+			{ id:125, pId:12, name:"小开",icon:"./img/default_face.png"},
+			{ id:13, pId:1, name:"招商部",icon:"./img/department.png",nocheck:true},
+			{ id:131, pId:13, name:"张三丰",icon:"./img/default_face.png"},
+			{ id:132, pId:13, name:"邱处机",icon:"./img/default_face.png"},
+			{ id:133, pId:13, name:"王重阳",icon:"./img/default_face.png"},
+			{ id:134, pId:13, name:"周芷若",icon:"./img/default_face.png"},
+			{ id:135, pId:13, name:"王若西",icon:"./img/default_face.png"},
+			{ id:14, pId:1, name:"小宝",icon:"./img/default_face.png"},
+			{ id:15, pId:1, name:"郭靖",icon:"./img/default_face.png"},
+			{ id:16, pId:1, name:"郭芙",icon:"./img/default_face.png",checked:true},
+			{ id:17, pId:1, name:"大定",icon:"./img/default_face.png"},
+			{ id:18, pId:1, name:"大侠",icon:"./img/default_face.png"},
+		];
+		var oldZnodes=zNodes;
+		//点击事件
+		function onClick(e,treeId, treeNode,clickFlag) {
+			zTree.expandNode(treeNode);
+			zTree.checkNode(treeNode,true,true);
+		}
+		//zTreeOnCheck选择事件
+		function zTreeOnCheck(e,treeId, treeNode){
+			if(!treeNode.checked){//只能勾选,不能取消
+				zTree.checkNode(treeNode,true,true);
+			}
+		}
+		//过滤搜索飘红产生的html
+		function filterHTMLTag(msg) {
+			var msg = msg.replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
+			msg = msg.replace(/[|]*\n/, '') //去除行尾空格
+			msg = msg.replace(/&npsp;/ig, ''); //去掉npsp
+			return msg;
+		}
+		
+		//初始化固定滚动列表高度
+		$(".layer").height($(".range-window").height()-$(".layer").offset().top);
+		$(function(){
+			/**初始化ztree**/
+			$.fn.zTree.init($("#range-tree"), setting, zNodes);
+			zTree = $.fn.zTree.getZTreeObj("range-tree");
+			var addbtn=$(".addbtn");
+			var mask=$(".mask");
+			var range_window=$(".range-window");
+			//弹出侧滑
+			addbtn.click(function(){
+				mask.show();
+				range_window.animate({right:"0"},200);
+				checkDataInit(false);//关闭侧滑后,重新打开是否保存上次操作的选择状态
+			})
+			//关闭侧滑
+			$(".mask,#shut-range-window").click(function(){
+				mask.hide();
+				range_window.animate({right:"-100%"},200);
+				return false;
+			}) 
+			//确认
+			$(".J_yeah").click(function(){
+				var selectedNode = zTree.getCheckedNodes(true)[0];
+				alert(selectedNode.id+"\n"+filterHTMLTag(selectedNode.name));
+				range_window.animate({right:"-100%"},200);
+				mask.hide();
+				return selectedNode;//返回选中的对象
+			})
+			/***搜索***/
+			fuzzySearch('range-tree','#searchuser',null,false);  //初始化模糊搜索方法
+		})
+		
+	</script>
+	</body>
+</html>
